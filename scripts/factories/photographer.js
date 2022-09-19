@@ -1,7 +1,9 @@
 function photographerFactory(data) {
     const { name, id, city, country, tagline, price, portrait } = data;
     const picture = `assets/photographers/${portrait}`;
-    const photographerLink = `data/photographers/${id}`;
+    const photographerLink = `photographer.html/?${id}`;
+    //URL
+    console.log(photographerLink);
 
     function getUserCardDOM() {
         const article = document.createElement( 'article' );
@@ -9,7 +11,7 @@ function photographerFactory(data) {
         const link = document.createElement( 'a' );
         link.setAttribute("href", photographerLink)
         // Lien vers la page photographe
-        console.log(link)
+        // console.log(link)
 
         const img = document.createElement( 'img' );
         img.setAttribute("src", picture)
