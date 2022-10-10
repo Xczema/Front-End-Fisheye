@@ -1,33 +1,23 @@
 //Mettre le code JavaScript lié à la page photographer.html
+const id = getId();
+init();
 
-// GET DATA
-async function getData() {
-    // Penser à remplacer par les données récupérées dans le json
-    return fetch("data/photographers.json")
-        .then(function(resp) {
-            return resp.json();
-        })
-}
 
 // DISPLAY DATA
 async function displayData(photographers) {
     const photographeHeader = document.querySelector(".photograph-header");
 
-    photographers.forEach((artiste) => {
-        const photographerModel = photographerFactory(artiste);
-        const userCardDOM = photographerModel.getUserCardDOM();
-        photographeHeader.appendChild(userCardDOM);
-    });
+        document.querySelector('main').appendChild(section)
 };
 
 async function init() {
     // Récupère les datas des photographes
     const data = await getData();
-    displayData(data.photographers);
+    const photographer = data.photographers.find(a => a.id === id);
+    const medias = data.media.filter(a => a.photographerId === id)
+    
+    displayMedias(medias, photographer);
 };
-
-init();
-
 
 //photographerFactory
 function photographerFactory(data) {
@@ -67,4 +57,12 @@ function photographerFactory(data) {
         return (section);
     }
     return { name, picture, getUserCardDOM }
+}
+
+function getId() {
+    const params = new Proxy(new URLSearchParams(window.location.search), {
+        get: (searchParams, prop) => searchParams.get(prop),
+      });
+      // Get the value of "some_key" in eg "https://example.com/?some_key=some_value"
+      return Number(params.id);  //params.key;; "some_value"
 }

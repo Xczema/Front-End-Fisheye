@@ -81,3 +81,21 @@ main img {
     object-fit: cover;
     border-radius: 50%;
 }
+
+section {
+    max-width: 1600px;
+    padding: 50px 20px;
+    margin: 0 auto;
+}
+
+section div {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+}
+
+section div img {
+    max-width: 100%;
+    position: relative;
+    transition: transform 250ms;
+    cursor: pointer;
+}
