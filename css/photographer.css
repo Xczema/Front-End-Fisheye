@@ -6,6 +6,7 @@
     background-color: #FAFAFA;
     height: 300px;
     margin: 0 100px;
+    display: flex;
 }
 
 .contact_button {
@@ -98,4 +99,24 @@ section div img {
     position: relative;
     transition: transform 250ms;
     cursor: pointer;
+}
+
+#photographerInfo h2 {
+    color: #D3573C;
+    font-size: 36px;
+    margin: 10px;
+    text-align: left;
+}
+
+#photographerInfo p {
+    color: #901C1C;
+    font-size: 1.2rem;
+    text-align: left;
+    margin-left: 10px;
+}
+
+#pTagline p {
+    color: black;
+    font-size: 1rem;
+    margin: 0px;
 }

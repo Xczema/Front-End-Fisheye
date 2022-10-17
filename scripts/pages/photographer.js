@@ -3,61 +3,22 @@ const id = getId();
 init();
 
 
-// DISPLAY DATA
-async function displayData(photographers) {
-    const photographeHeader = document.querySelector(".photograph-header");
-
-        document.querySelector('main').appendChild(section)
-};
-
 async function init() {
-    // Récupère les datas des photographes
+    // Récupères les datas des photographes
     const data = await getData();
     const photographer = data.photographers.find(a => a.id === id);
     const medias = data.media.filter(a => a.photographerId === id)
     
-    displayMedias(medias, photographer);
+    // Affiche les détails du photographe
+    displayPhotographerDetails(photographer);
+
+    // Afficher le filtre
+
+
+    // Afficher les médias
+    displayMedias(medias)
+
 };
-
-//photographerFactory
-function photographerFactory(data) {
-    const { name, id, city, country, tagline, price, portrait } = data;
-    const picture = `/assets/photographers/${portrait}`;
-    const photographerLink = `photographer.html/?${id}`;
-    //URL
-    // console.log(photographerLink);
-
-    function getUserCardDOM() {
-        const section = document.createElement( 'section' );
-
-        const link = document.createElement( 'a' );
-        link.setAttribute("href", photographerLink)
-        // Lien vers la page photographe
-        // console.log(link)
-
-        const img = document.createElement( 'img' );
-        img.setAttribute("src", picture)
-
-        const h2 = document.createElement( 'h2' );
-        h2.textContent = name;
-        const p = document.createElement( 'p');
-        p.textContent = `${city}, ${country}`;
-        const p2 = document.createElement( 'p' );
-        p2.textContent = `${tagline}`;
-        p2.style.color = "black";
-        const p3 = document.createElement( 'p' );
-        p3.textContent = `${price}€/jour`;
-        p3.style.color = "#525252";
-        section.appendChild(link);
-        link.appendChild(img);
-        link.appendChild(h2);
-        section.appendChild(p);
-        section.appendChild(p2);
-        section.appendChild(p3);
-        return (section);
-    }
-    return { name, picture, getUserCardDOM }
-}
 
 function getId() {
     const params = new Proxy(new URLSearchParams(window.location.search), {
@@ -65,4 +26,62 @@ function getId() {
       });
       // Get the value of "some_key" in eg "https://example.com/?some_key=some_value"
       return Number(params.id);  //params.key;; "some_value"
+}
+
+function displayPhotographerDetails(photographer) {
+    const divPhotographerInfo = document.createElement('div');
+    divPhotographerInfo.setAttribute("id", "photographerInfo");
+        divPhotographerInfo.innerHTML = `
+        <h2>${photographer.name}</h2>
+        <p>${photographer.city}, ${photographer.country}</p>
+        `
+    const pTagline = document.createElement('p');
+    pTagline.setAttribute("id", "pTagline");
+        pTagline.innerHTML = `
+        <p>${photographer.tagline}</p>
+        `
+    //COMPTEUR DE LIKE
+    // <div id="totalLikes" style="position: fixed;
+    // bottom: 0px;
+    // right: 50px;
+    // background-color: red;
+    // color: white;
+    // width: 100px;
+    // height: 100px;"></div>
+    
+    document.querySelector(".photograph-header").appendChild(divPhotographerInfo)
+    document.querySelector("#photographerInfo").appendChild(pTagline)
+}
+
+function displayPhotographerPicture(photographer) {
+    const picture = `assets/photographers/${portrait}`;
+    const divPhotographerPicture = document.createElement('div');
+    divPhotographerPicture.setAttribute("id", "photographerPicture")
+    const photographerPicture = document.createElement( 'img' );
+    photographerPicture.setAttribute("src", picture)
+
+    document.querySelector(".photograph-header").appendChild(divPhotographerPicture)
+    document.querySelector("#photographerPicture").appendChild(photographerPicture)
+}
+
+
+function displayMedias(medias, photographer) {
+    medias.forEach(media =>
+    {
+        const div = document.createElement('div')
+        if (media.image)
+        {
+            div.innerHTML = 
+            `<img src="assets/sample/${photographer.name}/${media.image}" style="width:200px"/>
+            <p>${media.title}</p>`
+            
+        } else {
+            div.innerHTML = 
+            `<video src="assets/sample/${photographer.name}/${media.video}" style="width:200px"></video>
+            <p>${media.title}</p>`
+            
+        }
+
+        document.querySelector(".photograph-header").appendChild(div)
+    })
 }
