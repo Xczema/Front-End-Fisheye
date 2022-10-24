@@ -12,8 +12,14 @@ async function init() {
     // Affiche les détails du photographe
     displayPhotographerDetails(photographer);
 
-    // Afficher le filtre
+    // Affiche le bouton "Contactez-moi"
+    displayContactButton();
 
+       // Affiche la photo de profil du photographe
+    displayPhotographerPicture(photographer);
+
+    // Afficher le filtre
+    
 
     // Afficher les médias
     displayMedias(medias)
@@ -53,35 +59,38 @@ function displayPhotographerDetails(photographer) {
     document.querySelector("#photographerInfo").appendChild(pTagline)
 }
 
+function displayContactButton() {
+    const contactButton = document.createElement('button');
+    contactButton.setAttribute("class", "contact_button");
+    contactButton.setAttribute("onclick", "displayModal()");
+        contactButton.innerHTML = `Contactez-moi`
+    document.querySelector(".photograph-header").appendChild(contactButton)
+}
+
 function displayPhotographerPicture(photographer) {
-    const picture = `assets/photographers/${portrait}`;
     const divPhotographerPicture = document.createElement('div');
     divPhotographerPicture.setAttribute("id", "photographerPicture")
-    const photographerPicture = document.createElement( 'img' );
-    photographerPicture.setAttribute("src", picture)
-
+        divPhotographerPicture.innerHTML = `
+        <img src="assets/photographers/${photographer.portrait}">
+        `
     document.querySelector(".photograph-header").appendChild(divPhotographerPicture)
-    document.querySelector("#photographerPicture").appendChild(photographerPicture)
 }
 
 
 function displayMedias(medias, photographer) {
     medias.forEach(media =>
     {
-        const div = document.createElement('div')
+        const gallery = document.createElement('div')
         if (media.image)
         {
-            div.innerHTML = 
-            `<img src="assets/sample/${photographer.name}/${media.image}" style="width:200px"/>
+            gallery.innerHTML = 
+            `<img src="assets/sample/Mimi Keel/${media.image}" style="width:200px"/>
             <p>${media.title}</p>`
-            
         } else {
-            div.innerHTML = 
-            `<video src="assets/sample/${photographer.name}/${media.video}" style="width:200px"></video>
+            gallery.innerHTML = 
+            `<video src="assets/sample/Mimi Keel/${media.video}" style="width:200px"></video>
             <p>${media.title}</p>`
-            
         }
-
-        document.querySelector(".photograph-header").appendChild(div)
+        document.querySelector(".photograph-gallery").appendChild(gallery)
     })
 }

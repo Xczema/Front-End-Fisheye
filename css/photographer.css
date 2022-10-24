@@ -7,6 +7,34 @@
     height: 300px;
     margin: 0 100px;
     display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.photograph-header img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.photograph-gallery {
+    margin: 0 100px;
+    background-color: lightyellow;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-gap: 20px;
+}
+
+.photograph-gallery div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.photograph-gallery img {
+    position: relative;
+    object-fit: cover;
 }
 
 .contact_button {
@@ -74,13 +102,6 @@ form input {
     height: 68px;
     border: none;
     border-radius: 5px;
-}
-
-main img {
-    width: 200px;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 50%;
 }
 
 section {
