@@ -2,40 +2,149 @@
     display: none;
 }
 
+#main {
+    padding: 0 100px;
+}
+
+/* PHOTOGRAPH-HEADER */
 .photograph-header {
     background-color: #FAFAFA;
     height: 300px;
-    margin: 0 100px;
     display: flex;
     justify-content: space-around;
     align-items: center;
+    margin-bottom: 3%;
 }
-.photograph-header img {
+#photographerInfo h2 {
+    color: #D3573C;
+    font-size: 64px;
+    margin: 10px;
+    text-align: left;
+}
+#photographerInfo p {
+    color: #901C1C;
+    font-size: 24px;
+    text-align: left;
+    margin-left: 10px;
+}
+#photographerInfo #pTagline p {
+    color: #525252;
+    font-size: 18px;
+    margin: 0px;
+}
+
+.photograph-header #photographerPicture img {
     width: 200px;
     height: 200px;
     object-fit: cover;
     border-radius: 50%;
 }
 
-.photograph-gallery {
-    margin: 0 100px;
-    background-color: lightyellow;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    grid-gap: 20px;
+/* FILTER BUTTON */
+.filterButton .filter_button {
+    padding-bottom: 4%;
+    font-weight: 700;
+}
+.filterButton .filter_button label {
+    font-size: 18px;
+}
+.filterButton .filter_button select {
+    font-size: 20px;
+    background-color: #901C1C;
+    margin-left: 1%;
+    width: 170px;
+    height: 50px;
+    padding: 11px;
+    font-family: "DM Sans", sans-serif;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
 }
 
-.photograph-gallery div {
+/* PHOTOGRAPH-GALLERY */
+.photograph-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(20%, 1fr));
+    grid-gap: 1% 7.5%;
+}
+.photograph-gallery .divGallery {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
 }
-
-.photograph-gallery img {
-    position: relative;
+.photograph-gallery .divGallery img {
+    width: 100%;
+    height: 15rem;
+    object-fit: cover;
+    border-radius: 2%;
+}
+.photograph-gallery .divGallery video {
+    width: 100%;
+    height: 15rem;
     object-fit: cover;
 }
+.photograph-gallery .divGallery p {
+    color: #901C1C;
+    font-size: 24px;
+}
+.photograph-gallery .divGallery .pictureText {
+    display: flex;
+    justify-content: space-between;
+}
+.photograph-gallery .divGallery .pictureText .pictureLike__btn {
+    display: flex;
+    align-items: center;
+}
+.photograph-gallery .divGallery .pictureText .pictureLike__btn .like__btn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+.photograph-gallery .divGallery .pictureText .pictureLike__btn #count {
+    color: #901C1C;
+    font-size: 24px;
+}
+.photograph-gallery .divGallery .pictureText .pictureLike__btn i.fas {
+    padding-left: 0.4rem;
+    color: #901C1C;
+    font-size: 1.25rem;
+}
+.photograph-gallery .divGallery .pictureText .pictureLike__btn i.far {
+    padding-left: 0.4rem;
+    color: #901C1C;
+    font-size: 1.25rem;
+}
+
+/* TOTAL LIKES & DAILY RATE */
+#totalLikes {
+    position: fixed;
+    display: flex;
+    justify-content: space-between;
+    bottom: 0px;
+    right: 50px;
+    background-color: #DB8876;
+    color: black;
+    width: 350px;
+    height: 90px;
+    font-size: 24px;
+    padding: 0 10px 0 10px;
+}
+#totalLikes div {
+    display: flex;
+    align-items: center;
+    padding: 0 10px 0 10px;
+}
+#totalLikes div i {
+    padding-left: 10px;
+}
+
+
+
+
+
+
+
+
 
 .contact_button {
     font-size: 20px;
@@ -120,24 +229,4 @@ section div img {
     position: relative;
     transition: transform 250ms;
     cursor: pointer;
-}
-
-#photographerInfo h2 {
-    color: #D3573C;
-    font-size: 36px;
-    margin: 10px;
-    text-align: left;
-}
-
-#photographerInfo p {
-    color: #901C1C;
-    font-size: 1.2rem;
-    text-align: left;
-    margin-left: 10px;
-}
-
-#pTagline p {
-    color: black;
-    font-size: 1rem;
-    margin: 0px;
 }

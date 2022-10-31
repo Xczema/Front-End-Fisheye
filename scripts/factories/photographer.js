@@ -18,11 +18,14 @@ function photographerFactory(data) {
 
         const h2 = document.createElement( 'h2' );
         h2.textContent = name;
+
         const p = document.createElement( 'p');
         p.textContent = `${city}, ${country}`;
+
         const p2 = document.createElement( 'p' );
         p2.textContent = `${tagline}`;
         p2.style.color = "black";
+        
         const p3 = document.createElement( 'p' );
         p3.textContent = `${price}€/jour`;
         p3.style.color = "#525252";

@@ -19,10 +19,14 @@ async function init() {
     displayPhotographerPicture(photographer);
 
     // Afficher le filtre
-    
+    displayFilterButton();
 
     // Afficher les médias
-    displayMedias(medias)
+    displayMedias(medias, photographer);
+
+    // Fonction Like
+    addLike();
+    displayTotalLikes(photographer);
 
 };
 
@@ -46,15 +50,6 @@ function displayPhotographerDetails(photographer) {
         pTagline.innerHTML = `
         <p>${photographer.tagline}</p>
         `
-    //COMPTEUR DE LIKE
-    // <div id="totalLikes" style="position: fixed;
-    // bottom: 0px;
-    // right: 50px;
-    // background-color: red;
-    // color: white;
-    // width: 100px;
-    // height: 100px;"></div>
-    
     document.querySelector(".photograph-header").appendChild(divPhotographerInfo)
     document.querySelector("#photographerInfo").appendChild(pTagline)
 }
@@ -63,7 +58,7 @@ function displayContactButton() {
     const contactButton = document.createElement('button');
     contactButton.setAttribute("class", "contact_button");
     contactButton.setAttribute("onclick", "displayModal()");
-        contactButton.innerHTML = `Contactez-moi`
+    contactButton.innerHTML = `Contactez-moi`
     document.querySelector(".photograph-header").appendChild(contactButton)
 }
 
@@ -71,26 +66,116 @@ function displayPhotographerPicture(photographer) {
     const divPhotographerPicture = document.createElement('div');
     divPhotographerPicture.setAttribute("id", "photographerPicture")
         divPhotographerPicture.innerHTML = `
-        <img src="assets/photographers/${photographer.portrait}">
+        <img src="assets/photographers/${photographer.portrait}"/>
         `
     document.querySelector(".photograph-header").appendChild(divPhotographerPicture)
+}
+
+function displayFilterButton() {
+    const filterButton = document.createElement('div');
+    filterButton.setAttribute("class", "filter_button");
+    filterButton.innerHTML = `
+    <label for="filter-select">Trier par</label>
+        <select name="filter" id="filter-select">
+            <option value="popularity">Popularité</option>
+            <option value="date">Date</option>
+            <option value="titre">Titre</option>
+        </select>
+    `
+    document.querySelector(".filterButton").appendChild(filterButton)
 }
 
 
 function displayMedias(medias, photographer) {
     medias.forEach(media =>
     {
-        const gallery = document.createElement('div')
+        let countLikes = media.likes
+        const divGallery = document.createElement('div')
+        divGallery.setAttribute("class", "divGallery")
         if (media.image)
         {
-            gallery.innerHTML = 
-            `<img src="assets/sample/Mimi Keel/${media.image}" style="width:200px"/>
-            <p>${media.title}</p>`
+            divGallery.innerHTML = `
+            <img src="assets/sample/${photographer.name}/${media.image}"/>
+            <div class="pictureText">
+                <div>
+                    <p>${media.title}</p>
+                </div>
+                <div class="pictureLike__btn">
+                    <button class="like__btn">
+                        <span id="count">${countLikes}</span>
+                        <span id="icon"><i class="far fa-regular fa-heart"></i></span>
+                    </button>
+                </div>
+            </div>
+            `
         } else {
-            gallery.innerHTML = 
-            `<video src="assets/sample/Mimi Keel/${media.video}" style="width:200px"></video>
-            <p>${media.title}</p>`
+            divGallery.innerHTML = `
+            <video src="assets/sample/${photographer.name}/${media.video}"></video>
+            <div class="pictureText">
+                <div>
+                    <p>${media.title}</p>
+                    </div>
+                    <div class="pictureLike__btn">
+                    <button class="like__btn">
+                        <span id="count">${countLikes}</span>
+                        <span id="icon"><i class="far fa-regular fa-heart"></i></span>
+                    </button>
+                </div>
+            </div>
+            `
         }
-        document.querySelector(".photograph-gallery").appendChild(gallery)
+        document.querySelector(".photograph-gallery").appendChild(divGallery)
     })
 }
+
+function addLike () {
+    const likeBtn = document.querySelector(".like__btn");
+    let likeIcon = document.querySelector("#icon");
+    let count = document.querySelector("#count");
+
+    // button clicked
+    let clicked = false;
+
+    likeBtn.addEventListener("click", () => {
+        if (!clicked) {
+            clicked = true;
+            likeIcon.innerHTML = `<i class="fas fa-solid fa-heart"></i>`;
+            count.textContent++;
+        } else {
+            clicked = false,
+            likeIcon.innerHTML = `<i class="far fa-regular fa-heart"></i>`;
+            count.textContent--;
+        }
+    })
+}
+
+function displayTotalLikes(photographer) {
+    //COMPTEUR DE LIKE
+    const totalLikes = document.createElement('div');
+    totalLikes.setAttribute("id", "totalLikes");
+    totalLikes.innerHTML = `
+    <div>
+        <p>297 081</p>
+        <i class="fas fa-solid fa-heart"></i>
+    </div>
+    <div>
+        <p>${photographer.price}€ / jour</p>
+    </div>
+    `
+    document.querySelector("#main").appendChild(totalLikes)
+}
+
+// Compteur de like
+
+// Créer le HTML et CSS
+// Placer les events listeners
+// Récupérer les informations
+// Calculer la nouvelle valeur de like (après le clic)
+// Les affichers dans le compteur de like total ET sur le media cliqué
+
+// Enelever le like
+// Enregistrer l'état "cliqué ou non" --> boolean
+
+// Créer un état "cliqué ou non"
+// L'appliquer à chaque button
+// Et par conséquent décrémenter le compteur de like
