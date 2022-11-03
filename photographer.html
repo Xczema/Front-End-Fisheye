@@ -16,6 +16,7 @@
       <div class="filterButton"></div>
       <div class="photograph-gallery"></div>
     </main>
+
     <div id="contact_modal">
 			<div class="modal">
         
@@ -23,15 +24,47 @@
           <h2>Contactez-moi</h2>
           <img src="../assets/icons/close.svg" onclick="closeModal()" />
         </header>
-				<form>
-					<div>
-						<label>Prénom</label>
-						<input />
-					</div>
-          <button class="contact_button">Envoyer</button>
+        <!--FORM-->
+        <form id="form" name="contactPhotographer" action="index.html" method="get">
+          <!-- FIRST NAME -->
+          <div class="formData" data-error="Vous devez entrer 2 caractères ou plus." data-error-visible="false">
+            <label for="first">Prénom</label>
+            <input class="text-control" type="text" id="first" name="first" minlength="2"/>
+          </div>
+          <!-- LAST NAME -->
+          <div class="formData" data-error="Vous devez entrer 2 caractères ou plus." data-error-visible="false">
+            <label for="last">Nom</label>
+            <input class="text-control" type="text" id="last" name="last"/>
+          </div>
+          <!-- EMAIL -->
+          <div class="formData" data-error="Vous devez entrer une adresse email valide." data-error-visible="false">
+            <label for="email">E-mail</label>
+            <input class="text-control" type="email" id="email" name="email"/>
+          </div>
+          <!-- MESSAGE -->
+          <div class="formData" data-error="Vous devez saisir au moins 140 caractères." data-error-visible="false">
+            <label for="message">Votre message</label>
+            <textarea class="form-message" type="text" id="message" name="message" rows="20" cols="1"></textarea>
+          </div>
+          <!-- BUTTON ENVOYER -->
+          <input class="contact_button" type="submit" value="Envoyer"/>
 				</form>
 			</div>
 		</div>
+
+        <!-- CONFIRMATION SUBMIT -->
+        <div class="container-confirmation-submit">
+          <div class="submitted-form">
+            <span class="close-modal-submit"></span>
+            <p>
+              Merci !
+              <br>
+              Votre message a bien été envoyé !
+            </p>
+            <button id="close-btn-confirmation"> Fermer
+            </button>
+          </div>
+        </div>
     <script
       src="https://kit.fontawesome.com/9cad400de0.js"
       crossorigin="anonymous"
@@ -39,5 +72,7 @@
     <script src="/scripts/pages/api.js"></script>
     <script src="/scripts/pages/photographer.js"></script>
     <script src="/scripts/utils/contactForm.js"></script>
+    <script src="/scripts/utils/confirmEnvoiForm.js"></script>
+    <script src="/scripts/utils/validationChampsFormulaire.js"></script>
   </body>
 </html>

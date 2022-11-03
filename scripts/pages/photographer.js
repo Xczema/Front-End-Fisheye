@@ -25,7 +25,7 @@ async function init() {
     displayMedias(medias, photographer);
 
     // Fonction Like
-    addLike();
+    listenForLike();
     displayTotalLikes(photographer);
 
 };
@@ -128,24 +128,29 @@ function displayMedias(medias, photographer) {
     })
 }
 
-function addLike () {
-    const likeBtn = document.querySelector(".like__btn");
+function listenForLike () {
+    const likeBtns = document.querySelectorAll(".like__btn");
+    
+    // button clicked
+    let clicked = false;
+    
+    // mettre dans une boucle
     let likeIcon = document.querySelector("#icon");
     let count = document.querySelector("#count");
 
-    // button clicked
-    let clicked = false;
-
-    likeBtn.addEventListener("click", () => {
-        if (!clicked) {
-            clicked = true;
-            likeIcon.innerHTML = `<i class="fas fa-solid fa-heart"></i>`;
-            count.textContent++;
-        } else {
-            clicked = false,
-            likeIcon.innerHTML = `<i class="far fa-regular fa-heart"></i>`;
-            count.textContent--;
-        }
+    likeBtns.forEach(button => 
+        {
+        button.addEventListener("click", () => {
+            if (!clicked) {
+                clicked = true;
+                likeIcon.innerHTML = `<i class="fas fa-solid fa-heart"></i>`;
+                count.textContent++;
+            } else {
+                clicked = false,
+                likeIcon.innerHTML = `<i class="far fa-regular fa-heart"></i>`;
+                count.textContent--;
+            }
+        })
     })
 }
 
