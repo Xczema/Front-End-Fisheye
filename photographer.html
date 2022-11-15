@@ -21,9 +21,10 @@
 			<div class="modal">
         
 				<header>
-          <h2>Contactez-moi</h2>
+          <h2 id="form-title">Contactez-moi</h2>
           <img src="../assets/icons/close.svg" onclick="closeModal()" />
         </header>
+
         <!--FORM-->
         <form id="form" name="contactPhotographer" action="index.html" method="get">
           <!-- FIRST NAME -->
@@ -65,14 +66,18 @@
             </button>
           </div>
         </div>
-    <script
-      src="https://kit.fontawesome.com/9cad400de0.js"
-      crossorigin="anonymous"
-    ></script>
+      
+
+      
+        
+    <script src="https://kit.fontawesome.com/9cad400de0.js" crossorigin="anonymous"></script>
     <script src="/scripts/pages/api.js"></script>
+    <script src="/scripts/models/image.js"></script>
+    <script src="/scripts/models/video.js"></script>
     <script src="/scripts/pages/photographer.js"></script>
     <script src="/scripts/utils/contactForm.js"></script>
     <script src="/scripts/utils/confirmEnvoiForm.js"></script>
     <script src="/scripts/utils/validationChampsFormulaire.js"></script>
+    <script src="/scripts/utils/lightbox.js" type="module" defer></script>
   </body>
 </html>

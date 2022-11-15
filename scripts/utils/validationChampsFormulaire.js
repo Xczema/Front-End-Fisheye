@@ -1,4 +1,26 @@
+// ------ FORMULAIRE CONTACT H2 ------ //
+
 // Récupération des éléments du DOM
+init();
+async function init() {
+    // Récupères les datas des photographes
+    const data = await getData();
+    const photographer = data.photographers.find(a => a.id === id);
+
+    //// Ajout du nom du photographe au H2 du formulaire de contact
+    changeFormTitle(photographer);
+};
+
+// Ajout du nom du photographe au H2 du formulaire de contact
+function changeFormTitle (photographer) {
+    formTitle.innerHTML = `
+    <h2>Contactez-moi<br>${photographer.name}</h2>
+    `
+}
+
+
+// ------ VALIDATION DES CHAMPS DU FORMULAIRE ------ //
+const formTitle = document.getElementById('form-title');
 const firstName = document.getElementById('first');
 const lastName = document.getElementById('last');
 const email = document.getElementById('email');
@@ -17,7 +39,6 @@ function closeModal() {
     modal.style.display = "none";
 }
 
-// ------ VALIDATION DES CHAMPS DU FORMULAIRE ------ //
 // Verification Prénom
 function checkFirstName() {
     if (firstName.value.trim().length < 2 || first.value.trim() === '' || !firstName.value.match(regex)) {
@@ -63,6 +84,8 @@ function checkMessage() {
     message.style.border = 'solid #279e7a 0.19rem';
     return true;
 }
+
+
 
 
 // Paramétrage de l'event qui delenche la function de validation de chaque champ du formulaire.

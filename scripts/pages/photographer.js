@@ -1,4 +1,3 @@
-//Mettre le code JavaScript lié à la page photographer.html
 const id = getId();
 init();
 
@@ -6,6 +5,7 @@ init();
 async function init() {
     // Récupères les datas des photographes
     const data = await getData();
+
     const photographer = data.photographers.find(a => a.id === id);
     const medias = data.media.filter(a => a.photographerId === id)
     
@@ -15,7 +15,7 @@ async function init() {
     // Affiche le bouton "Contactez-moi"
     displayContactButton();
 
-       // Affiche la photo de profil du photographe
+    // Affiche la photo de profil du photographe
     displayPhotographerPicture(photographer);
 
     // Afficher le filtre
@@ -89,44 +89,20 @@ function displayFilterButton() {
 function displayMedias(medias, photographer) {
     medias.forEach(media =>
     {
-        let countLikes = media.likes
         const divGallery = document.createElement('div')
         divGallery.setAttribute("class", "divGallery")
-        if (media.image)
-        {
-            divGallery.innerHTML = `
-            <img src="assets/sample/${photographer.name}/${media.image}"/>
-            <div class="pictureText">
-                <div>
-                    <p>${media.title}</p>
-                </div>
-                <div class="pictureLike__btn">
-                    <button class="like__btn">
-                        <span id="count">${countLikes}</span>
-                        <span id="icon"><i class="far fa-regular fa-heart"></i></span>
-                    </button>
-                </div>
-            </div>
-            `
+        if (media.image) {
+            const gallery_image = new Image (media, photographer);
+            divGallery.innerHTML = gallery_image.buildCard();
         } else {
-            divGallery.innerHTML = `
-            <video src="assets/sample/${photographer.name}/${media.video}"></video>
-            <div class="pictureText">
-                <div>
-                    <p>${media.title}</p>
-                    </div>
-                    <div class="pictureLike__btn">
-                    <button class="like__btn">
-                        <span id="count">${countLikes}</span>
-                        <span id="icon"><i class="far fa-regular fa-heart"></i></span>
-                    </button>
-                </div>
-            </div>
-            `
+            const gallery_video = new Video (media, photographer);
+            divGallery.innerHTML = gallery_video.buildCard();
         }
+        
         document.querySelector(".photograph-gallery").appendChild(divGallery)
     })
 }
+
 
 function listenForLike () {
     const likeBtns = document.querySelectorAll(".like__btn");
@@ -169,7 +145,6 @@ function displayTotalLikes(photographer) {
     `
     document.querySelector("#main").appendChild(totalLikes)
 }
-
 // Compteur de like
 
 // Créer le HTML et CSS
