@@ -1,15 +1,9 @@
-class Image
+class Image extends Media
 {
     constructor(data, photographer)
     {
-        this.id = data.id;
-        this.photographerId = data.photographerId;
-        this.title = data.title;
+        super(data, photographer);
         this.media = data.image;
-        this.countLikes = data.likes;
-        this.date = data.date;
-        this.price = data.price;
-        this.photographer = photographer
     }
 
     buildCard()

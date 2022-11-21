@@ -8,7 +8,10 @@ async function init() {
 
     const photographer = data.photographers.find(a => a.id === id);
     const medias = data.media.filter(a => a.photographerId === id)
-    
+    .map(a => mediaFactory(a, photographer))
+
+    console.log(medias)
+
     // Affiche les détails du photographe
     displayPhotographerDetails(photographer);
 
@@ -25,7 +28,7 @@ async function init() {
     displayMedias(medias, photographer);
 
     // Fonction Like
-    listenForLike();
+    listenForLike(medias);
     displayTotalLikes(photographer);
 
 };
@@ -86,37 +89,38 @@ function displayFilterButton() {
 }
 
 
-function displayMedias(medias, photographer) {
+function displayMedias(medias) {
     medias.forEach(media =>
     {
         const divGallery = document.createElement('div')
         divGallery.setAttribute("class", "divGallery")
-        if (media.image) {
-            const gallery_image = new Image (media, photographer);
-            divGallery.innerHTML = gallery_image.buildCard();
-        } else {
-            const gallery_video = new Video (media, photographer);
-            divGallery.innerHTML = gallery_video.buildCard();
-        }
+        divGallery.innerHTML = media.buildCard();
         
         document.querySelector(".photograph-gallery").appendChild(divGallery)
     })
 }
 
+function mediaFactory (media, photographer) {
+    if (media.image) {
+        return new Image (media, photographer);
+    }
+    return new Video (media, photographer);
+}
 
-function listenForLike () {
-    const likeBtns = document.querySelectorAll(".like__btn");
-    
-    // button clicked
-    let clicked = false;
-    
-    // mettre dans une boucle
-    let likeIcon = document.querySelector("#icon");
-    let count = document.querySelector("#count");
 
-    likeBtns.forEach(button => 
-        {
-        button.addEventListener("click", () => {
+function listenForLike (medias) {
+    medias.forEach(media =>
+    {
+        // Récupérer les selectors
+        const likeBtn = document.querySelector(".like__btn");
+        let likeIcon = document.querySelector("#icon");
+        let count = document.querySelector("#count");
+        let clicked = false;
+
+        likeBtn.addEventListener('click', countTotal);
+
+        // Mettre une fonction like qui va s'appliquer à tous les medias (indifférement que ce soit une image ou une vidéo) car la fonction est la même
+        function countTotal () {
             if (!clicked) {
                 clicked = true;
                 likeIcon.innerHTML = `<i class="fas fa-solid fa-heart"></i>`;
@@ -126,9 +130,37 @@ function listenForLike () {
                 likeIcon.innerHTML = `<i class="far fa-regular fa-heart"></i>`;
                 count.textContent--;
             }
-        })
+
+            console.log(count)
+
+        }
     })
 }
+
+    // const likeBtns = document.querySelectorAll(".like__btn");
+    
+    // // button clicked
+    // let clicked = false;
+    
+    // // mettre dans une boucle
+    // let likeIcon = document.querySelector("#icon");
+    // let count = document.querySelector("#count");
+
+    // likeBtns.forEach(button => 
+    //     {
+    //     button.addEventListener("click", () => {
+    //         if (!clicked) {
+    //             clicked = true;
+    //             likeIcon.innerHTML = `<i class="fas fa-solid fa-heart"></i>`;
+    //             count.textContent++;
+    //         } else {
+    //             clicked = false,
+    //             likeIcon.innerHTML = `<i class="far fa-regular fa-heart"></i>`;
+    //             count.textContent--;
+    //         }
+    //     })
+    // })
+
 
 function displayTotalLikes(photographer) {
     //COMPTEUR DE LIKE

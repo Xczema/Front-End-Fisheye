@@ -1,3 +1,8 @@
+/**
+ * @property {HTMLElement} element
+ */
+
+
 class Lightbox {
 
     static init () {
@@ -14,9 +19,22 @@ class Lightbox {
      * @param {string} url URL de l'image
      */
     constructor (url) {
-        const element = this.buildDom(url)
-        document.body.appendChild(element)
+        this.element = this.buildDom(url)
+        document.body.appendChild(this.element)
     }
+
+    loadImage (url) {
+        const image = new Image ();
+        const container = this.element.querySelector('.lightbox__container')
+        const loader = document.createElement('div')
+        loader.classList.add('lightbox__loader')
+        container.appendChild(loader)
+        image.onload = function () {
+            console.log('chargé')
+        }
+        image.src = url
+    }
+
 
     /**
      * 
@@ -51,11 +69,9 @@ class Lightbox {
         <button class="lightbox__close">Close dialog</button>
         <button class="lightbox__next">Next image</button>
         <button class="lightbox__prev">Previous image</button>
-        <div class="lightbox__container">
-            <img src ="${url}" alt ="">
-        </div>
+        <div class="lightbox__container"></div>
         `
-        dom.querySelector('.lightbox__close').addEventListener('click', this.close.bind(this))
+        // dom.querySelector('.lightbox__close').addEventListener('click', this.close.bind(this))
         return dom
     }
 

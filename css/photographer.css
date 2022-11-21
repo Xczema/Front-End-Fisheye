@@ -430,6 +430,14 @@ section div img {
     min-height: 100vh;
 }
 
+.lightbox__loader {
+    width: 38px;
+    height: 38px;
+    opacity: .5;
+    background: url(../assets/icons/loader.svg) center center no-repeat;
+}
+
+
 @keyframes lightboxIn {
     from {opacity: 0;}
     to {opacity: 1;}
