@@ -1,4 +1,7 @@
+// VARIABLES GLOBALES
 const id = getId();
+let countTotalLikes = 0;
+
 init();
 
 
@@ -9,8 +12,6 @@ async function init() {
     const photographer = data.photographers.find(a => a.id === id);
     const medias = data.media.filter(a => a.photographerId === id)
     .map(a => mediaFactory(a, photographer))
-
-    console.log(medias)
 
     // Affiche les détails du photographe
     displayPhotographerDetails(photographer);
@@ -25,12 +26,11 @@ async function init() {
     displayFilterButton();
 
     // Afficher les médias
-    displayMedias(medias, photographer);
+    displayMedias(medias);
 
     // Fonction Like
-    listenForLike(medias);
     displayTotalLikes(photographer);
-
+    listenForLike(medias);
 };
 
 function getId() {
@@ -99,7 +99,6 @@ function displayMedias(medias) {
         document.querySelector(".photograph-gallery").appendChild(divGallery)
     })
 }
-
 function mediaFactory (media, photographer) {
     if (media.image) {
         return new Image (media, photographer);
@@ -107,60 +106,33 @@ function mediaFactory (media, photographer) {
     return new Video (media, photographer);
 }
 
+//**     LIKE FUNCTIONNALITY    */
 
 function listenForLike (medias) {
     medias.forEach(media =>
     {
-        // Récupérer les selectors
-        const likeBtn = document.querySelector(".like__btn");
-        let likeIcon = document.querySelector("#icon");
-        let count = document.querySelector("#count");
+        const likeBtn = document.querySelector(`.media-wrapper[data-id="${media.id}"] .like__btn`);
+        const likeIcon = document.querySelector(`.media-wrapper[data-id="${media.id}"] .iconLike`);
+        const count = document.querySelector(`.media-wrapper[data-id="${media.id}"] .count`);
+        const countTotal = document.querySelector(`#countTotalLikes`);
         let clicked = false;
 
-        likeBtn.addEventListener('click', countTotal);
-
-        // Mettre une fonction like qui va s'appliquer à tous les medias (indifférement que ce soit une image ou une vidéo) car la fonction est la même
-        function countTotal () {
+        likeBtn.addEventListener('click', () =>
+        {       
             if (!clicked) {
                 clicked = true;
-                likeIcon.innerHTML = `<i class="fas fa-solid fa-heart"></i>`;
                 count.textContent++;
+                likeIcon.innerHTML = media.addLike();
+                countTotal.innerHTML = media.addLikeTotal();
             } else {
                 clicked = false,
-                likeIcon.innerHTML = `<i class="far fa-regular fa-heart"></i>`;
                 count.textContent--;
+                likeIcon.innerHTML = media.removeLike();
+                countTotal.innerHTML = media.removeLikeTotal();
             }
-
-            console.log(count)
-
-        }
+        });
     })
 }
-
-    // const likeBtns = document.querySelectorAll(".like__btn");
-    
-    // // button clicked
-    // let clicked = false;
-    
-    // // mettre dans une boucle
-    // let likeIcon = document.querySelector("#icon");
-    // let count = document.querySelector("#count");
-
-    // likeBtns.forEach(button => 
-    //     {
-    //     button.addEventListener("click", () => {
-    //         if (!clicked) {
-    //             clicked = true;
-    //             likeIcon.innerHTML = `<i class="fas fa-solid fa-heart"></i>`;
-    //             count.textContent++;
-    //         } else {
-    //             clicked = false,
-    //             likeIcon.innerHTML = `<i class="far fa-regular fa-heart"></i>`;
-    //             count.textContent--;
-    //         }
-    //     })
-    // })
-
 
 function displayTotalLikes(photographer) {
     //COMPTEUR DE LIKE
@@ -168,7 +140,7 @@ function displayTotalLikes(photographer) {
     totalLikes.setAttribute("id", "totalLikes");
     totalLikes.innerHTML = `
     <div>
-        <p>297 081</p>
+        <p id="countTotalLikes">${countTotalLikes}</p>
         <i class="fas fa-solid fa-heart"></i>
     </div>
     <div>
@@ -177,17 +149,3 @@ function displayTotalLikes(photographer) {
     `
     document.querySelector("#main").appendChild(totalLikes)
 }
-// Compteur de like
-
-// Créer le HTML et CSS
-// Placer les events listeners
-// Récupérer les informations
-// Calculer la nouvelle valeur de like (après le clic)
-// Les affichers dans le compteur de like total ET sur le media cliqué
-
-// Enelever le like
-// Enregistrer l'état "cliqué ou non" --> boolean
-
-// Créer un état "cliqué ou non"
-// L'appliquer à chaque button
-// Et par conséquent décrémenter le compteur de like

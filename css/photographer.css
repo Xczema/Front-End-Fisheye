@@ -101,7 +101,7 @@
     border: none;
     cursor: pointer;
 }
-.photograph-gallery .divGallery .pictureText .pictureLike__btn #count {
+.photograph-gallery .divGallery .pictureText .pictureLike__btn .count {
     color: #901C1C;
     font-size: 24px;
 }
