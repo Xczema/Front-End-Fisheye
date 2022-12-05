@@ -140,8 +140,7 @@
 }
 
 
-
-
+/* MODAL */
 .contact_button {
     font-size: 20px;
     font-weight: bold;
@@ -154,7 +153,6 @@
     border-radius: 5px;
     cursor: pointer;
 }
-
 .modal {
     position: absolute;
     top: 10%;
@@ -171,17 +169,14 @@
     padding: 35px;
     margin: auto;
 }
-
 .modal header {
     justify-content: space-between;
     width: 100%;
     height: 100%;
 }
-
 .modal header img {
     cursor: pointer;
 }
-
 .modal header h2 {
     font-size: 64px;
     font-weight: normal;
@@ -189,23 +184,19 @@
     margin: 0;
     padding-bottom: 2%;
 }
-
 form {
     display: flex;
     width: 100%;
     flex-direction: column;
     align-items: flex-start;
 }
-
 #form-title {
     margin: 0;
 }
-
 form label {
     color: #312E2E;
     font-size: 36px;
 }
-
 form div {
     display: flex;
     flex-direction: column;
@@ -213,7 +204,6 @@ form div {
     align-items: self-start;
     margin-bottom: 26px;
 }
-
 form input {
     width: 100%;
     height: 68px;
@@ -239,9 +229,6 @@ section div img {
     cursor: pointer;
 }
 
-
-
-
 .form-message {
     margin: 0;
     padding: 8px;
@@ -260,7 +247,7 @@ section div img {
 }
 /* MESSAGE D'ERREUR FORMULAIRE VALIDATION */
 .formData[data-error]::after {
-    content: attr(data-error);
+    content: attr(data-erroz-indexr);
     font-size: 1.2em;
     font-weight: 700;
     color: #901C1C;
@@ -291,7 +278,6 @@ section div img {
     right: 0;
     z-index: 1;
   }
-  
   .submitted-form {
     width: 100%;
     height: 100%;
@@ -300,7 +286,6 @@ section div img {
     position: fixed;
     top: 0px;
   }
-  
   .close-modal-submit {
     position: absolute;
     right: 15px;
@@ -312,7 +297,6 @@ section div img {
     transform: scale(0.7);
     color: #FFFFFF;
   }
-  
   .close-modal-submit:before,
   .close-modal-submit:after {
     position: absolute;
@@ -322,15 +306,12 @@ section div img {
     width: 0.1875rem;
     background-color: #fff;
   }
-  
   .close-modal-submit:before {
     transform: rotate(45deg);
   }
-  
   .close-modal-submit:after {
     transform: rotate(-45deg);
   }
-  
   .submitted-form p {
     width: 100%;
     height: 100%;
@@ -342,7 +323,6 @@ section div img {
     padding: 20px;
     text-align: center;
   }
-  
   #close-btn-confirmation {
     position: relative;
     top: -165px;
@@ -374,9 +354,6 @@ section div img {
     overflow: auto;
     animation: lightboxIn .5s;
     transition: opacity .3s;
-}
-.lightbox.fadeout {
-    opacity: 0;
 }
 .lightbox__next,
 .lightbox__prev {
@@ -419,7 +396,8 @@ section div img {
 
 .lightbox__container img {
     max-width: 100%;
-    height: auto;
+    height: 95vh;
+    background: url(../assets/icons/loader.svg) center center no-repeat;
 }
 .lightbox__container {
     display: flex;
@@ -428,13 +406,6 @@ section div img {
     margin-left: 150px;
     margin-right: 150px;
     min-height: 100vh;
-}
-
-.lightbox__loader {
-    width: 38px;
-    height: 38px;
-    opacity: .5;
-    background: url(../assets/icons/loader.svg) center center no-repeat;
 }
 
 

@@ -6,12 +6,16 @@
 class Lightbox {
 
     static init () {
-        const links = document.querySelectorAll('a[href$=".jpg"], a[href$=".mp4"]')
-            .forEach(link => link.addEventListener('click', e =>
+        // const links = document.querySelectorAll('a[href$=".jpg"], a[href$=".mp4"]')
+        document.querySelectorAll('.media-thumbnail').forEach(link => 
+        {
+            link.addEventListener('click', e =>
             {
                 e.preventDefault()
-                new Lightbox(e.currentTarget.getAttribute('href'))
-            }))
+                const src = e.currentTarget.getAttribute('data-src')
+                new Lightbox(src)
+            })
+        })
     }
 
     /**
@@ -30,20 +34,22 @@ class Lightbox {
         loader.classList.add('lightbox__loader')
         container.appendChild(loader)
         image.onload = function () {
-            console.log('chargé')
+        container.removeChild(loader);
+        container.appendChild(image);
         }
         image.src = url
     }
-
 
     /**
      * 
      * @param {KeyboardEvent} e 
      */
     onKeyUp (e) {
+        if (e.key === 'Escape') {
+            this.close(e)
+        }
 
     }
-
 
     /**
      * Ferme la lightbox
@@ -76,5 +82,3 @@ class Lightbox {
     }
 
 }
-
-Lightbox.init()
