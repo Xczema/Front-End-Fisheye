@@ -4,13 +4,11 @@ class Video extends Media
     {
         super(data, photographer);
         this.video = data.video;
-        countTotalLikes += this.countLikes;
     }
 
     buildCard()
     {
-    return `
-        <div class="media-wrapper" data-id="${this.id}">
+    return `<div class="media-wrapper" data-id="${this.id}">
             <a href="#" class="media-thumbnail" data-src="assets/sample/${this.photographer.name}/${this.video}">
                 <video src="assets/sample/${this.photographer.name}/${this.video}" loop muted autoplay controls></video>
             </a>
@@ -25,47 +23,18 @@ class Video extends Media
                     </button>
                 </div>
             </div>
-        </div>
-        `
+        </div>`
     }
-
     // LIGHTBOX
     renderSlide() {
-        document.querySelector('.lightbox').hidden = false;
         const video = document.createElement('video');
+        video.classList.add('containerMedia');
         video.src = `assets/sample/${this.photographer.name}/${this.video}`;
         video.setAttribute('loop', '');
         video.setAttribute('muted', '');
         video.setAttribute('autoplay', '');
         video.setAttribute('controls', '');
-        document.querySelector('.lightbox__container').appendChild(video);
-        return video
+        return video;
     }
 
-    addLike()
-    {
-    return `
-    <i class="fas fa-solid fa-heart"></i>
-    `
-    }
-    removeLike()
-    {
-    return `
-    <i class="far fa-regular fa-heart"></i>
-    `
-    }
-    addLikeTotal()
-    {
-        countTotalLikes++;
-        return `
-        ${countTotalLikes}
-    `
-    }
-    removeLikeTotal()
-    {
-        countTotalLikes--;
-        return `
-        ${countTotalLikes}
-    `
-    }
 }

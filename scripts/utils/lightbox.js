@@ -25,6 +25,7 @@ class Lightbox {
     constructor (url) {
         this.element = this.buildDom(url)
         document.body.appendChild(this.element)
+        document.addEventListener('keyup', this.onKeyUp.bind(this))
     }
 
     loadImage (url) {

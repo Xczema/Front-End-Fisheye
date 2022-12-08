@@ -12,10 +12,6 @@ async function init() {
     const medias = data.media.filter(a => a.photographerId === id)
     .map(a => mediaFactory(a, photographer));
 
-    // Initialise la Lightbox
-    // initSlider(medias);
-    // hideSlider()
-
     // Affiche les détails du photographe
     displayPhotographerDetails(photographer);
     
@@ -37,9 +33,6 @@ async function init() {
     
     // LightBox
     initSlider(medias);
-    // listenForSlider(medias);
-    // Lightbox.init();
-
 };
 
 
@@ -165,32 +158,39 @@ function displayTotalLikes(photographer)
 }
 
 //**     SLIDER FUNCTIONNALITY    */
-function listenForSlider(medias)
-{
+function listenForSlider(medias) {
     medias.forEach(media =>
-        {
-            const openLightbox = document.querySelector(`.media-wrapper[data-id="${media.id}"] .media-thumbnail`);
-            const loadMedia = document.querySelector('.lightbox__container');
-            const closeSliderEl = document.querySelector('.lightbox__close');
-            openLightbox.addEventListener('click', () =>
-            {   
-                loadMedia.appendChild = media.renderSlide();                
-            });
+    {
+        const openLightbox = document.querySelector(`.media-wrapper[data-id="${media.id}"] .media-thumbnail`);
+        const loadMedia = document.querySelector('.lightbox__container');
+        openLightbox.addEventListener('click', () =>
+        {   
+            document.querySelector('.lightbox').hidden = false;
+            loadMedia.appendChild(media.renderSlide());                
+        });
+        
+        
+        // next slider
+        // previous slider
+        
+        // comme on a "media", on sait quel index on se trouve. Du coup, on peut savoir quel media est le suivant ou le précédent.
+        // >> "Tutoriel Javascript : Lightbox" sur Youtube à 37:17 pour un exemple.    
+    })
 
-            closeSliderEl.addEventListener('click', (event) =>
-            {
-                closeSliderEl.innerHTML = media.closeSlider(event);
-            });
-            
-            // next slider
-            // previous slider
+    document.querySelector('.lightbox__close').addEventListener('click', () => {
+        removeCurrentMedia();
+        hideSlider(); 
+    });
 
-            // comme on a "media", on sait quel index on se trouve. Du coup, on peut savoir quel media est le suivant ou le précédent.
-            // >> "Tutoriel Javascript : Lightbox" sur Youtube à 37:17 pour un exemple.
+    document.addEventListener('keyup', (e) => {
+        if (e.key === 'Escape') {
+            removeCurrentMedia();
+            hideSlider();
+        }
+    })
 
-        })
 }
-
+ 
 function initSlider(medias)
 {
     const sliderEl = document.createElement('div');
@@ -204,16 +204,11 @@ function initSlider(medias)
     document.querySelector('body').appendChild(sliderEl);
     hideSlider();
     listenForSlider(medias);
-    // dom.querySelector('.lightbox__close').addEventListener('click', this.close.bind(this))
-        // <img src="../assets/icons/loader.svg" alt="">
 }
 
-// function showSlider()
-// {
-//     document.querySelector('.lightbox').setAttribute("hidden", false);
-// }
-
-function hideSlider()
-{
+function hideSlider() {
     document.querySelector('.lightbox').setAttribute("hidden", true);
+}
+function removeCurrentMedia() {
+    document.querySelector('.lightbox__container .containerMedia').remove();
 }
