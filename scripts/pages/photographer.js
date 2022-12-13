@@ -23,6 +23,7 @@ async function init() {
     
     // Afficher le filtre
     displayFilterButton();
+    sortByPopularity(medias);
     
     // Afficher les médias
     displayMedias(medias);
@@ -35,9 +36,6 @@ async function init() {
     initSlider(medias);
 };
 
-
-
-
 function getId() {
     const params = new Proxy(new URLSearchParams(window.location.search), {
         get: (searchParams, prop) => searchParams.get(prop),
@@ -45,7 +43,6 @@ function getId() {
       // Get the value of "some_key" in eg "https://example.com/?some_key=some_value"
       return Number(params.id);  //params.key;; "some_value"
 }
-
 //**     PHOTOGRAPHE HEADER    */
 function displayPhotographerDetails(photographer) {
     const divPhotographerInfo = document.createElement('div');
@@ -77,21 +74,47 @@ function displayPhotographerPicture(photographer) {
         `
     document.querySelector(".photograph-header").appendChild(divPhotographerPicture)
 }
-
+//**     BTN Filtre séléctionné    */
+function getSelectValue() {
+    let selectedValue = document.getElementById("filter-select").value;
+    console.log(selectedValue);
+    if (selectedValue === 'popularity') {
+        sortByPopularity();
+    }
+    if (selectedValue === 'date') {
+        sortByDate();
+    }
+}
+//**     Sort by Popularity Function    */
+function sortByPopularity(medias) {
+        console.log('Medias filtré par popularité');
+        console.log(medias);
+        medias.forEach(media => {
+            console.log(media.countLikes)
+            // media.sort((a, b) => {
+            //     return b.countLikes - a.countLikes;
+            // });
+        });
+}
+//**     Sort by Date Function    */
+function sortByDate() {
+        console.log('Medias filtré par date');
+}
 //**     BTN FILTER GALLERY    */
 function displayFilterButton() {
     const filterButton = document.createElement('div');
     filterButton.setAttribute("class", "filter_button");
     filterButton.innerHTML = `
     <label for="filter-select">Trier par</label>
-        <select name="filter" id="filter-select">
-            <option value="popularity">Popularité</option>
-            <option value="date">Date</option>
-            <option value="titre">Titre</option>
-        </select>
+    <select name="filter" id="filter-select" onchange="getSelectValue()">
+    <option value="popularity">Popularité</option>
+    <option value="date">Date</option>
+    <option value="titre">Titre</option>
+    </select>
     `
-    document.querySelector(".filterButton").appendChild(filterButton)
+    document.querySelector(".filterButton").appendChild(filterButton);
 }
+
 
 //**     CREATE GALLERY    */
 function displayMedias(medias)
@@ -112,7 +135,6 @@ function mediaFactory (media, photographer)
     }
     return new Video (media, photographer);
 }
-
 //**     LIKE FUNCTIONNALITY    */
 function listenForLike (medias)
 {
@@ -156,41 +178,51 @@ function displayTotalLikes(photographer)
     `
     document.querySelector("#main").appendChild(totalLikes)
 }
-
 //**     SLIDER FUNCTIONNALITY    */
-function listenForSlider(medias) {
+function listenForSlider(medias)
+{
     medias.forEach(media =>
     {
-        const openLightbox = document.querySelector(`.media-wrapper[data-id="${media.id}"] .media-thumbnail`);
+        const linksMedia = document.querySelector(`.media-wrapper[data-id="${media.id}"] .media-thumbnail`);
         const loadMedia = document.querySelector('.lightbox__container');
-        openLightbox.addEventListener('click', () =>
+        linksMedia.addEventListener('click', () =>
         {   
             document.querySelector('.lightbox').hidden = false;
             loadMedia.appendChild(media.renderSlide());                
-        });
-        
-        
-        // next slider
-        // previous slider
-        
-        // comme on a "media", on sait quel index on se trouve. Du coup, on peut savoir quel media est le suivant ou le précédent.
-        // >> "Tutoriel Javascript : Lightbox" sur Youtube à 37:17 pour un exemple.    
-    })
+        });   
+    });
+    // Lightbox : Next Media
+    document.querySelector('.lightbox__next').addEventListener('click', () => {
+        nextMedia(medias);
+    });
+    document.addEventListener('keyup', (e) => {
+        if (e.key === 'ArrowRight') {
+            nextMedia(medias);
+        }
+    });
 
+    // Lightbox : Previous Media
+    document.querySelector('.lightbox__prev').addEventListener('click', () => {
+        prevMedia(medias);
+    });
+    document.addEventListener('keyup', (e) => {
+        if (e.key === 'ArrowLeft') {
+            prevMedia(medias);
+        }
+    });
+
+    // Lightbox : Close
     document.querySelector('.lightbox__close').addEventListener('click', () => {
         removeCurrentMedia();
         hideSlider(); 
     });
-
     document.addEventListener('keyup', (e) => {
         if (e.key === 'Escape') {
             removeCurrentMedia();
             hideSlider();
         }
-    })
-
-}
- 
+    });
+};
 function initSlider(medias)
 {
     const sliderEl = document.createElement('div');
@@ -204,11 +236,44 @@ function initSlider(medias)
     document.querySelector('body').appendChild(sliderEl);
     hideSlider();
     listenForSlider(medias);
-}
-
+};
 function hideSlider() {
     document.querySelector('.lightbox').setAttribute("hidden", true);
-}
+};
 function removeCurrentMedia() {
     document.querySelector('.lightbox__container .containerMedia').remove();
-}
+};
+function nextMedia(medias) {
+    console.log('Next Media');
+    const mediaLoadedId = document.querySelector(".containerMedia[data-id]").getAttribute('data-id');
+    const loadMedia = document.querySelector('.lightbox__container');
+    let index = medias.findIndex(function (media) {
+        return media.id == mediaLoadedId;
+    });
+    if (index === medias.length -1) {
+        index = -1;
+    }
+    removeCurrentMedia();
+    medias.forEach(media => {
+        if (mediaLoadedId == media.id) {
+            loadMedia.appendChild(media.renderNextSlide(medias, index));
+        }
+    })
+};
+function prevMedia(medias) {
+    console.log('Prev Media');
+    const mediaLoadedId = document.querySelector(".containerMedia[data-id]").getAttribute('data-id');
+    const loadMedia = document.querySelector('.lightbox__container');
+    let index = medias.findIndex(function (media) {
+        return media.id == mediaLoadedId;
+    });
+    if (index === 0) {
+        index = medias.length;
+    }
+    removeCurrentMedia();
+    medias.forEach(media => {
+        if (mediaLoadedId == media.id) {
+            loadMedia.appendChild(media.renderPrevSlide(medias, index));
+        }
+    })
+};

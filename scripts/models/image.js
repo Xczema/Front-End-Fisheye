@@ -31,8 +31,8 @@ class Image extends Media
     renderSlide() {
         const img = document.createElement('img');
         img.classList.add('containerMedia');
+        img.setAttribute('data-id', `${this.id}`);
         img.src = `assets/sample/${this.photographer.name}/${this.media}`;
         return img;
     }
-
 }

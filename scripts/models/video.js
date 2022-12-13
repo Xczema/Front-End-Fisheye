@@ -29,6 +29,7 @@ class Video extends Media
     renderSlide() {
         const video = document.createElement('video');
         video.classList.add('containerMedia');
+        video.setAttribute('data-id', `${this.id}`);
         video.src = `assets/sample/${this.photographer.name}/${this.video}`;
         video.setAttribute('loop', '');
         video.setAttribute('muted', '');
@@ -36,5 +37,4 @@ class Video extends Media
         video.setAttribute('controls', '');
         return video;
     }
-
 }

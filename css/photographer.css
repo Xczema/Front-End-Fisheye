@@ -399,6 +399,11 @@ section div img {
     height: 95vh;
     background: url(../assets/icons/loader.svg) center center no-repeat;
 }
+.lightbox__container video {
+    max-width: 100%;
+    height: 95vh;
+    background: url(../assets/icons/loader.svg) center center no-repeat;
+}
 .lightbox__container {
     display: flex;
     align-items: center;
