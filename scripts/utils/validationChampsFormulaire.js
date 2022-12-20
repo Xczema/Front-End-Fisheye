@@ -11,14 +11,6 @@ async function init() {
     changeFormTitle(photographer);
 };
 
-// Ajout du nom du photographe au H2 du formulaire de contact
-function changeFormTitle (photographer) {
-    formTitle.innerHTML = `
-    <h2>Contactez-moi<br>${photographer.name}</h2>
-    `
-}
-
-
 // ------ VALIDATION DES CHAMPS DU FORMULAIRE ------ //
 const formTitle = document.getElementById('form-title');
 const firstName = document.getElementById('first');
@@ -28,6 +20,13 @@ const message = document.getElementById('message');
 const input = document.getElementsByClassName('text-control');
 const form = document.getElementById('form');
 const regex = /^[a-zA-ZÀ-ÖØ-öø-ÿ]+$/;
+
+// Ajout du nom du photographe au H2 du formulaire de contact
+function changeFormTitle (photographer) {
+    formTitle.innerHTML = `
+    <h2>Contactez-moi<br>${photographer.name}</h2>
+    `
+}
 
 function displayModal() {
     const modal = document.getElementById("contact_modal");
@@ -48,6 +47,8 @@ function checkFirstName() {
     }
     first.parentElement.setAttribute('data-error-visible', 'false');
     first.style.border = 'solid #279e7a 0.19rem';
+    let firstNameVal = document.getElementById('first').value;
+    console.log(firstNameVal);
     return true;
 }
 // Verification Nom de famille
@@ -59,6 +60,8 @@ function checkLastName() {
     }
     last.parentElement.setAttribute('data-error-visible', 'false');
     last.style.border = 'solid #279e7a 0.19rem';
+    let nameVal = document.getElementById('last').value;
+    console.log(nameVal);
     return true;
 }
 // Verification Adresse Email
@@ -71,6 +74,8 @@ function checkEmail() {
     }
     email.parentElement.setAttribute('data-error-visible', 'true');
     email.style.border = '2px solid #e54858';
+    let emailVal = document.getElementById('email').value;
+    console.log(emailVal);
     return false;
 }
 // Verification Message
@@ -82,6 +87,8 @@ function checkMessage() {
     }
     message.parentElement.setAttribute('data-error-visible', 'false');
     message.style.border = 'solid #279e7a 0.19rem';
+    let messageVal = document.getElementById('message').value;
+    console.log(messageVal);
     return true;
 }
 

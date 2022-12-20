@@ -26,7 +26,7 @@ class Media {
         countTotalLikes--;
         return `${countTotalLikes}`
     }
-    
+
     // LIGHTBOX FUNCTION
     renderNextSlide(medias, index) {
         if (medias[index + 1] instanceof Image) {

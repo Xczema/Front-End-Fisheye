@@ -1,6 +1,7 @@
 // VARIABLES GLOBALES
 const id = getId();
 let countTotalLikes = 0;
+let numberOfMediaLiked = 0;
 
 init();
 
@@ -23,7 +24,7 @@ async function init() {
     
     // Afficher le filtre
     displayFilterButton();
-    sortByPopularity(medias);
+    listenForSort(medias);
     
     // Afficher les médias
     displayMedias(medias);
@@ -42,7 +43,8 @@ function getId() {
       });
       // Get the value of "some_key" in eg "https://example.com/?some_key=some_value"
       return Number(params.id);  //params.key;; "some_value"
-}
+};
+
 //**     PHOTOGRAPHE HEADER    */
 function displayPhotographerDetails(photographer) {
     const divPhotographerInfo = document.createElement('div');
@@ -58,67 +60,102 @@ function displayPhotographerDetails(photographer) {
         `
     document.querySelector(".photograph-header").appendChild(divPhotographerInfo)
     document.querySelector("#photographerInfo").appendChild(pTagline)
-}
+};
+
 function displayContactButton() {
     const contactButton = document.createElement('button');
     contactButton.setAttribute("class", "contact_button");
     contactButton.setAttribute("onclick", "displayModal()");
     contactButton.innerHTML = `Contactez-moi`
     document.querySelector(".photograph-header").appendChild(contactButton)
-}
+};
+
 function displayPhotographerPicture(photographer) {
     const divPhotographerPicture = document.createElement('div');
     divPhotographerPicture.setAttribute("id", "photographerPicture")
         divPhotographerPicture.innerHTML = `
-        <img src="assets/photographers/${photographer.portrait}"/>
+        <img src="assets/photographers/${photographer.portrait}" alt=""/>
         `
     document.querySelector(".photograph-header").appendChild(divPhotographerPicture)
-}
-//**     BTN Filtre séléctionné    */
-function getSelectValue() {
-    let selectedValue = document.getElementById("filter-select").value;
-    console.log(selectedValue);
-    if (selectedValue === 'popularity') {
-        sortByPopularity();
-    }
-    if (selectedValue === 'date') {
-        sortByDate();
-    }
-}
-//**     Sort by Popularity Function    */
-function sortByPopularity(medias) {
-        console.log('Medias filtré par popularité');
-        console.log(medias);
-        medias.forEach(media => {
-            console.log(media.countLikes)
-            // media.sort((a, b) => {
-            //     return b.countLikes - a.countLikes;
-            // });
-        });
-}
-//**     Sort by Date Function    */
-function sortByDate() {
-        console.log('Medias filtré par date');
-}
+};
+
 //**     BTN FILTER GALLERY    */
 function displayFilterButton() {
     const filterButton = document.createElement('div');
     filterButton.setAttribute("class", "filter_button");
     filterButton.innerHTML = `
     <label for="filter-select">Trier par</label>
-    <select name="filter" id="filter-select" onchange="getSelectValue()">
+    <select name="filter" id="filter-select">
     <option value="popularity">Popularité</option>
     <option value="date">Date</option>
     <option value="titre">Titre</option>
     </select>
     `
     document.querySelector(".filterButton").appendChild(filterButton);
-}
+};
 
+//**     Listen Value filter Btn    */
+function listenForSort(medias) {
+    document.getElementById('filter-select').addEventListener('input', (e) => {
+        const selectedValue = e.target.value;
+        if (selectedValue === 'popularity') {
+            sortByPopularity(medias);
+            countTotalLikes = countTotalLikes - numberOfMediaLiked;
+            numberOfMediaLiked = 0;
+        }
+        if (selectedValue === 'date') {
+            sortByDate(medias);
+            countTotalLikes = countTotalLikes - numberOfMediaLiked;
+            numberOfMediaLiked = 0;
+        }
+        if (selectedValue === 'titre') {
+            sortByTitle(medias);
+            countTotalLikes = countTotalLikes - numberOfMediaLiked;
+            numberOfMediaLiked = 0;
+        }
+        displayMedias(medias);
+        listenForLike(medias);
+        updateTotalLikes(countTotalLikes);
+    });
+};
+
+//**     Sort by Popularity Function    */
+function sortByPopularity(medias) {
+        medias = medias.sort((a,b) => {
+            return b.countLikes - a.countLikes;
+        });
+};
+
+//**     Sort by Date Function    */
+function sortByDate(medias) {
+    medias = medias.sort((a,b) => {
+        if (a.date < b.date) {
+            return -1
+        }
+        if (a.date > b.date) {
+            return 1
+        }
+        return 0;
+    });
+};
+
+//**     Sort by Title Function    */
+function sortByTitle(medias) {
+    medias = medias.sort((a,b) => {
+        if (a.title < b.title) {
+            return -1
+        }
+        if (a.title > b.title) {
+            return 1
+        }
+        return 0;
+    });
+};
 
 //**     CREATE GALLERY    */
 function displayMedias(medias)
 {
+    document.querySelector(".photograph-gallery").innerHTML = '';
     medias.forEach(media =>
     {
         const divGallery = document.createElement('div')
@@ -127,17 +164,18 @@ function displayMedias(medias)
         
         document.querySelector(".photograph-gallery").appendChild(divGallery)
     })
-}
+};
+
 function mediaFactory (media, photographer)
 {
     if (media.image) {
         return new Image (media, photographer);
     }
     return new Video (media, photographer);
-}
+};
+
 //**     LIKE FUNCTIONNALITY    */
-function listenForLike (medias)
-{
+function listenForLike (medias) {
     medias.forEach(media =>
     {
         const likeBtn = document.querySelector(`.media-wrapper[data-id="${media.id}"] .like__btn`);
@@ -145,23 +183,25 @@ function listenForLike (medias)
         const count = document.querySelector(`.media-wrapper[data-id="${media.id}"] .count`);
         const countTotal = document.querySelector(`#countTotalLikes`);
         let clicked = false;
-
         likeBtn.addEventListener('click', () =>
         {       
             if (!clicked) {
                 clicked = true;
+                numberOfMediaLiked++;
                 count.textContent++;
                 likeIcon.innerHTML = media.addLike();
                 countTotal.innerHTML = media.addLikeTotal();
             } else {
                 clicked = false,
+                numberOfMediaLiked--;
                 count.textContent--;
                 likeIcon.innerHTML = media.removeLike();
                 countTotal.innerHTML = media.removeLikeTotal();
             }
         });
     })
-}
+};
+
 function displayTotalLikes(photographer)
 {
     //COMPTEUR DE LIKE
@@ -174,10 +214,15 @@ function displayTotalLikes(photographer)
     </div>
     <div>
         <p>${photographer.price}€ / jour</p>
-    </div>
-    `
+    </div>`;
     document.querySelector("#main").appendChild(totalLikes)
-}
+};
+
+function updateTotalLikes(countTotalLikes) {
+    const totalLikes = document.getElementById('countTotalLikes');
+    totalLikes.innerHTML = `${countTotalLikes}`
+};
+
 //**     SLIDER FUNCTIONNALITY    */
 function listenForSlider(medias)
 {
@@ -223,28 +268,34 @@ function listenForSlider(medias)
         }
     });
 };
+
 function initSlider(medias)
 {
     const sliderEl = document.createElement('div');
     sliderEl.classList.add('lightbox');
+    sliderEl.ariaLabel="image closeup view";
     sliderEl.innerHTML = `
-        <button class="lightbox__close">Close dialog</button>
-        <button class="lightbox__next">Next image</button>
-        <button class="lightbox__prev">Previous image</button>
-        <div class="lightbox__container"></div>
+        <button class="lightbox__close" aria-label="Close dialog">Close dialog</button>
+        <button class="lightbox__next" aria-label="Next image">Next image</button>
+        <button class="lightbox__prev" aria-label="Previous image">Previous image</button>
+        <div class="lightbox__container">
+            <h2>Arc-en-ciel</h2>
+        </div>
         `;
     document.querySelector('body').appendChild(sliderEl);
     hideSlider();
     listenForSlider(medias);
 };
+
 function hideSlider() {
     document.querySelector('.lightbox').setAttribute("hidden", true);
 };
+
 function removeCurrentMedia() {
     document.querySelector('.lightbox__container .containerMedia').remove();
 };
+
 function nextMedia(medias) {
-    console.log('Next Media');
     const mediaLoadedId = document.querySelector(".containerMedia[data-id]").getAttribute('data-id');
     const loadMedia = document.querySelector('.lightbox__container');
     let index = medias.findIndex(function (media) {
@@ -260,8 +311,8 @@ function nextMedia(medias) {
         }
     })
 };
+
 function prevMedia(medias) {
-    console.log('Prev Media');
     const mediaLoadedId = document.querySelector(".containerMedia[data-id]").getAttribute('data-id');
     const loadMedia = document.querySelector('.lightbox__container');
     let index = medias.findIndex(function (media) {
