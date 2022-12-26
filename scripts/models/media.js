@@ -28,6 +28,11 @@ class Media {
     }
 
     // LIGHTBOX FUNCTION
+    changeTitle() {
+        return (this.title);
+    }
+
+
     renderNextSlide(medias, index) {
         if (medias[index + 1] instanceof Image) {
             const img = document.createElement('img');

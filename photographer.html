@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
   <head>
     <link href="../css/style.css" rel="stylesheet" type="text/css" />
     <meta charset="utf-8">
@@ -22,7 +22,7 @@
         
 				<header>
           <h2 id="form-title">Contactez-moi</h2>
-          <img src="../assets/icons/close.svg" onclick="closeModal()" />
+          <img src="../assets/icons/close.svg" alt="" aria-labelledby="Close Contact form" onclick="closeModal()"/>
         </header>
 
         <!--FORM-->
@@ -48,7 +48,7 @@
             <textarea class="form-message" type="text" id="message" name="message" rows="20" cols="1"></textarea>
           </div>
           <!-- BUTTON ENVOYER -->
-          <input class="contact_button" type="submit" value="Envoyer"/>
+          <input class="contact_button" type="submit" aria-labelledby="Send" value="Envoyer"/>
 				</form>
 			</div>
 		</div>

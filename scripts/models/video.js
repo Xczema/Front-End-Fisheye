@@ -35,7 +35,7 @@ class Video extends Media
         video.setAttribute('loop', '');
         video.setAttribute('muted', '');
         video.setAttribute('autoplay', '');
-        video.setAttribute('controls', '');
+        // video.setAttribute('controls', '');
         return video;
     }
 }

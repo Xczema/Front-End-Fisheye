@@ -24,6 +24,7 @@ async function init() {
     
     // Afficher le filtre
     displayFilterButton();
+    sortByPopularity(medias); // Valeur par défaut
     listenForSort(medias);
     
     // Afficher les médias
@@ -35,7 +36,8 @@ async function init() {
     
     // LightBox
     initSlider(medias);
-};
+    loadSlider(medias);
+}
 
 function getId() {
     const params = new Proxy(new URLSearchParams(window.location.search), {
@@ -43,7 +45,7 @@ function getId() {
       });
       // Get the value of "some_key" in eg "https://example.com/?some_key=some_value"
       return Number(params.id);  //params.key;; "some_value"
-};
+}
 
 //**     PHOTOGRAPHE HEADER    */
 function displayPhotographerDetails(photographer) {
@@ -60,7 +62,7 @@ function displayPhotographerDetails(photographer) {
         `
     document.querySelector(".photograph-header").appendChild(divPhotographerInfo)
     document.querySelector("#photographerInfo").appendChild(pTagline)
-};
+}
 
 function displayContactButton() {
     const contactButton = document.createElement('button');
@@ -68,7 +70,7 @@ function displayContactButton() {
     contactButton.setAttribute("onclick", "displayModal()");
     contactButton.innerHTML = `Contactez-moi`
     document.querySelector(".photograph-header").appendChild(contactButton)
-};
+}
 
 function displayPhotographerPicture(photographer) {
     const divPhotographerPicture = document.createElement('div');
@@ -77,7 +79,7 @@ function displayPhotographerPicture(photographer) {
         <img src="assets/photographers/${photographer.portrait}" alt=""/>
         `
     document.querySelector(".photograph-header").appendChild(divPhotographerPicture)
-};
+}
 
 //**     BTN FILTER GALLERY    */
 function displayFilterButton() {
@@ -85,14 +87,14 @@ function displayFilterButton() {
     filterButton.setAttribute("class", "filter_button");
     filterButton.innerHTML = `
     <label for="filter-select">Trier par</label>
-    <select name="filter" id="filter-select">
+    <select name="filter" id="filter-select" aria-labelledby="Trier par">
     <option value="popularity">Popularité</option>
     <option value="date">Date</option>
     <option value="titre">Titre</option>
     </select>
     `
     document.querySelector(".filterButton").appendChild(filterButton);
-};
+}
 
 //**     Listen Value filter Btn    */
 function listenForSort(medias) {
@@ -117,14 +119,14 @@ function listenForSort(medias) {
         listenForLike(medias);
         updateTotalLikes(countTotalLikes);
     });
-};
+}
 
 //**     Sort by Popularity Function    */
 function sortByPopularity(medias) {
         medias = medias.sort((a,b) => {
             return b.countLikes - a.countLikes;
         });
-};
+}
 
 //**     Sort by Date Function    */
 function sortByDate(medias) {
@@ -137,7 +139,7 @@ function sortByDate(medias) {
         }
         return 0;
     });
-};
+}
 
 //**     Sort by Title Function    */
 function sortByTitle(medias) {
@@ -150,7 +152,7 @@ function sortByTitle(medias) {
         }
         return 0;
     });
-};
+}
 
 //**     CREATE GALLERY    */
 function displayMedias(medias)
@@ -164,7 +166,7 @@ function displayMedias(medias)
         
         document.querySelector(".photograph-gallery").appendChild(divGallery)
     })
-};
+}
 
 function mediaFactory (media, photographer)
 {
@@ -172,7 +174,7 @@ function mediaFactory (media, photographer)
         return new Image (media, photographer);
     }
     return new Video (media, photographer);
-};
+}
 
 //**     LIKE FUNCTIONNALITY    */
 function listenForLike (medias) {
@@ -200,7 +202,7 @@ function listenForLike (medias) {
             }
         });
     })
-};
+}
 
 function displayTotalLikes(photographer)
 {
@@ -216,26 +218,33 @@ function displayTotalLikes(photographer)
         <p>${photographer.price}€ / jour</p>
     </div>`;
     document.querySelector("#main").appendChild(totalLikes)
-};
+}
 
 function updateTotalLikes(countTotalLikes) {
     const totalLikes = document.getElementById('countTotalLikes');
     totalLikes.innerHTML = `${countTotalLikes}`
-};
+}
 
 //**     SLIDER FUNCTIONNALITY    */
-function listenForSlider(medias)
+function loadSlider(medias)
 {
     medias.forEach(media =>
     {
         const linksMedia = document.querySelector(`.media-wrapper[data-id="${media.id}"] .media-thumbnail`);
         const loadMedia = document.querySelector('.lightbox__container');
+        const mediaTitle = document.getElementById('lightbox__mediaTitle');
         linksMedia.addEventListener('click', () =>
         {   
             document.querySelector('.lightbox').hidden = false;
-            loadMedia.appendChild(media.renderSlide());                
+            loadMedia.appendChild(media.renderSlide());
+            mediaTitle.innerHTML = media.changeTitle();
+            functionnalitiesSlider(medias);
         });   
     });
+}
+
+function functionnalitiesSlider(medias)
+{
     // Lightbox : Next Media
     document.querySelector('.lightbox__next').addEventListener('click', () => {
         nextMedia(medias);
@@ -259,7 +268,8 @@ function listenForSlider(medias)
     // Lightbox : Close
     document.querySelector('.lightbox__close').addEventListener('click', () => {
         removeCurrentMedia();
-        hideSlider(); 
+        hideSlider();
+        document.removeEventListener('keyup', 'ArrowLeft', 'ArrowRight', 'Escape');
     });
     document.addEventListener('keyup', (e) => {
         if (e.key === 'Escape') {
@@ -267,9 +277,9 @@ function listenForSlider(medias)
             hideSlider();
         }
     });
-};
+}
 
-function initSlider(medias)
+function initSlider()
 {
     const sliderEl = document.createElement('div');
     sliderEl.classList.add('lightbox');
@@ -279,21 +289,20 @@ function initSlider(medias)
         <button class="lightbox__next" aria-label="Next image">Next image</button>
         <button class="lightbox__prev" aria-label="Previous image">Previous image</button>
         <div class="lightbox__container">
-            <h2>Arc-en-ciel</h2>
+            <h2 id="lightbox__mediaTitle">Arc-en-ciel</h2>
         </div>
         `;
     document.querySelector('body').appendChild(sliderEl);
     hideSlider();
-    listenForSlider(medias);
-};
+}
 
 function hideSlider() {
     document.querySelector('.lightbox').setAttribute("hidden", true);
-};
+}
 
 function removeCurrentMedia() {
     document.querySelector('.lightbox__container .containerMedia').remove();
-};
+}
 
 function nextMedia(medias) {
     const mediaLoadedId = document.querySelector(".containerMedia[data-id]").getAttribute('data-id');
@@ -310,7 +319,7 @@ function nextMedia(medias) {
             loadMedia.appendChild(media.renderNextSlide(medias, index));
         }
     })
-};
+}
 
 function prevMedia(medias) {
     const mediaLoadedId = document.querySelector(".containerMedia[data-id]").getAttribute('data-id');
@@ -327,4 +336,4 @@ function prevMedia(medias) {
             loadMedia.appendChild(media.renderPrevSlide(medias, index));
         }
     })
-};
+}

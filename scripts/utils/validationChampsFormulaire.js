@@ -9,34 +9,54 @@ async function init() {
 
     //// Ajout du nom du photographe au H2 du formulaire de contact
     changeFormTitle(photographer);
-};
+    // Accessibilité
+    accessibility(photographer);
+}
 
 // ------ VALIDATION DES CHAMPS DU FORMULAIRE ------ //
 const formTitle = document.getElementById('form-title');
+const modalPage = document.getElementById("contact_modal");
 const firstName = document.getElementById('first');
 const lastName = document.getElementById('last');
 const email = document.getElementById('email');
 const message = document.getElementById('message');
-const input = document.getElementsByClassName('text-control');
+// const input = document.getElementsByClassName('text-control');
 const form = document.getElementById('form');
 const regex = /^[a-zA-ZÀ-ÖØ-öø-ÿ]+$/;
 
 // Ajout du nom du photographe au H2 du formulaire de contact
 function changeFormTitle (photographer) {
-    formTitle.innerHTML = `
-    <h2>Contactez-moi<br>${photographer.name}</h2>
-    `
+    formTitle.innerHTML = `Contactez-moi<br>${photographer.name}`;
+}
+
+// Accessibilité
+function accessibility (photographer) {
+    modalPage.setAttribute("aria-labelledby", `Contactez-moi ${photographer.name}`);
+    firstName.setAttribute("aria-labelledby", "First name");
+    lastName.setAttribute("aria-labelledby", "Last name");
+    email.setAttribute("aria-labelledby", "Email");
+    message.setAttribute("aria-labelledby", "Your message");
+
+    // 'Escape' key close form
+    document.addEventListener('keyup', (e) => {
+        if (e.key === 'Escape') {
+            const modalPage = document.getElementById("contact_modal");
+            modalPage.style.display = "none";
+        }
+    });
 }
 
 function displayModal() {
-    const modal = document.getElementById("contact_modal");
-	modal.style.display = "block";
+	modalPage.style.display = "block";
+    document.getElementById('first').focus();
 }
 
+// Fermer le formulaire de Contact
 function closeModal() {
     const modal = document.getElementById("contact_modal");
     modal.style.display = "none";
 }
+
 
 // Verification Prénom
 function checkFirstName() {
@@ -51,6 +71,7 @@ function checkFirstName() {
     console.log(firstNameVal);
     return true;
 }
+
 // Verification Nom de famille
 function checkLastName() {
     if (lastName.value.trim().length < 2 || last.value.trim() === "" || !lastName.value.match(regex)) {
@@ -64,20 +85,22 @@ function checkLastName() {
     console.log(nameVal);
     return true;
 }
+
 // Verification Adresse Email
 function checkEmail() {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (email.value.trim().match(re)) {
         email.parentElement.setAttribute('data-error-visible', 'false');
         email.style.border = 'solid #279e7a 0.19rem';
+        let emailVal = document.getElementById('email').value;
+        console.log(emailVal);
         return true;
     }
     email.parentElement.setAttribute('data-error-visible', 'true');
     email.style.border = '2px solid #e54858';
-    let emailVal = document.getElementById('email').value;
-    console.log(emailVal);
     return false;
 }
+
 // Verification Message
 function checkMessage() {
     if (message.value.trim().length < 140 || message.value.trim() === "") {
@@ -91,9 +114,6 @@ function checkMessage() {
     console.log(messageVal);
     return true;
 }
-
-
-
 
 // Paramétrage de l'event qui delenche la function de validation de chaque champ du formulaire.
 // Note: L'évènement focusout est déclenché lorsqu'un élément du DOM est sur le point de perdre le focus. La différence principale entre cet évènement et blur (en-US) est que ce dernier ne se propage pas.
